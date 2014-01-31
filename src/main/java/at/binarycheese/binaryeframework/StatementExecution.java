@@ -90,7 +90,7 @@ public class StatementExecution<T> {
 	public List<T> findAll(String tablename) {
 		try {
 			List<T> entities = new ArrayList<>();
-			PreparedStatement statement = findAllStatement(tablename);
+			PreparedStatement statement = QueryStatementBuilder.findAllStatement(tablename);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
 				T entity = bind(resultSet);
@@ -106,7 +106,7 @@ public class StatementExecution<T> {
 
 	public T findById(int id, String tablename) {
 		 try {
-	            PreparedStatement findByIdStatement = findByIdStatement(id, tablename,connection);
+	            PreparedStatement findByIdStatement = QueryStatementBuilder.findByIdStatement(id, tablename,connection);
 	            ResultSet resultSet = findByIdStatement.executeQuery();
 	            if (!resultSet.next()) {
 	                throw new EFrameWorkUserIsIdiotException("Exact match didn't return data");
