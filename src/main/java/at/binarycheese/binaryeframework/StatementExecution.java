@@ -1,4 +1,4 @@
-package asdf.lol.rofl;
+package at.binarycheese.binaryeframework;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
