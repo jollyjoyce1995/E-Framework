@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FindAllExcecution<T> {
+public class FindAllExcecution<T> extends StatementExcecution<T> {
 	public List<T> findAll(String tablename, Connection connection) {
 		try {
 			List<T> entities = new ArrayList<>();

@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class DeleteStatement<T> {
-	public void delete(T t, Connection connection) {
+public class DeleteExecution<T> implements StatementExcecution<T> {
+
+	@Override
+	public int execute(T t, Connection connection) {
 		try {
 			PreparedStatement deleteStmnt = QueryStatementBuilder.deleteStatement(t,
 					connection);
@@ -20,5 +22,11 @@ public class DeleteStatement<T> {
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at delete");
 		}
+	}
+
+	@Override
+	public void selectExecute() {
+		// TODO Auto-generated method stub
+		
 	}
 }

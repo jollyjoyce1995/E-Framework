@@ -4,9 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class InsertExcecution<T> {
-	
-	public int insert(T t, Connection connection) {
+public class InsertExecution<T> implements StatementExcecution<T> {
+
+	@Override
+	public int execute(T t, Connection connection) {
 		try {
 			PreparedStatement insertStmnt = QueryStatementBuilder.insertStatement(t, connection);
 			int effectedRowCount = insertStmnt.executeUpdate();
@@ -22,4 +23,11 @@ public class InsertExcecution<T> {
 			throw new EFrameWorkUserIsIdiotException("Failed at insert");
 		}
 	}
+
+	@Override
+	public void selectExecute() {
+		// TODO Auto-generated method stub
+		return;
+	}
+
 }

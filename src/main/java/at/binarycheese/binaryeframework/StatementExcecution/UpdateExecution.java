@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class UpdateExcecution<T> {
-	public int update(T t, Connection connection) {
+public class UpdateExecution<T> implements StatementExcecution<T> {
+
+	@Override
+	public int execute(T t, Connection connection) {
 		try {
 			PreparedStatement updateStmnt = QueryStatementBuilder.updateStatement(t,
 					connection);
@@ -21,5 +23,11 @@ public class UpdateExcecution<T> {
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at update");
 		}
+	}
+
+	@Override
+	public void selectExecute() {
+		// TODO Auto-generated method stub
+		
 	}
 }
