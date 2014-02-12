@@ -3,6 +3,7 @@ package at.binarycheese.binaryeframework.StatementExcecution;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UpdateExecution<T> implements StatementExcecution<T> {
 
@@ -26,8 +27,9 @@ public class UpdateExecution<T> implements StatementExcecution<T> {
 	}
 
 	@Override
-	public void selectExecute() {
+	public ArrayList<T> selectExecute(Integer id, String tablename,
+			Connection connection) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

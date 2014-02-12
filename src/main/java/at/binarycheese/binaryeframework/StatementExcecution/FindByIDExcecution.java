@@ -4,10 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class FindByIDExcecution<T> implements StatementExcecution<T> {
 
-	public T findById(int id, String tablename, Connection connection) {
+	@Override
+	public int execute(T t, Connection connection) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ArrayList<T> selectExecute(Integer id, String tablename,
+			Connection connection) {
+		// TODO Auto-generated method stub
 		try {
 			PreparedStatement findByIdStatement = QueryStatementBuilder
 					.findByIdStatement(id, tablename, connection);
@@ -25,17 +35,6 @@ public class FindByIDExcecution<T> implements StatementExcecution<T> {
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at findById query");
 		}
-	}
 
-	@Override
-	public int execute(T t, Connection connection) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void selectExecute() {
-		// TODO Auto-generated method stub
-		
 	}
 }
