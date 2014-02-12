@@ -1,4 +1,4 @@
-package at.spengergasse.jdbc.querybuilder.test;
+package POS_JDBCFramework_QueryBuilder.test;
 
 import static org.junit.Assert.*;
 import at.spengergasse.jdbc.querybuilder.src.*;
