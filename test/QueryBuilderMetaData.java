@@ -1,4 +1,4 @@
-package POS_JDBCFramework_QueryBuilder.test;
+package test;
 
 public class QueryBuilderMetaData {
 
