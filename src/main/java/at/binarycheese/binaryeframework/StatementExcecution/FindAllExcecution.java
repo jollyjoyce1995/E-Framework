@@ -19,7 +19,7 @@ public class FindAllExcecution<T> implements StatementExcecution<T> {
 	public ArrayList<T> selectExecute(Integer id, String tablename,
 			Connection connection) {
 				try {
-					List<T> entities = new ArrayList<>();
+					ArrayList<T> entities = new ArrayList<>();
 					PreparedStatement statement = QueryStatementBuilder
 							.findAllStatement(tablename, connection);
 					ResultSet resultSet = statement.executeQuery();

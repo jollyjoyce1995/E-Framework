@@ -31,7 +31,9 @@ public class FindByIDExcecution<T> implements StatementExcecution<T> {
 				throw new EFrameWorkUserIsIdiotException(
 						"Exact returned more then one row");
 			}
-			return entity;
+			ArrayList<T> asdf =new ArrayList<T>();
+			asdf.add(entity);
+			return asdf;
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at findById query");
 		}
