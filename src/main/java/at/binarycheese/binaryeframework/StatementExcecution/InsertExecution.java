@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class InsertExecution<T> implements StatementExcecution<T> {
+public class InsertExecution<T> extends DMLStatementExecution<T> {
+
+	public InsertExecution(Connection connection) {
+		super(connection);
+	}
 
 	@Override
-	public int execute(T t, Connection connection) {
+	public int execute(T t) {
 		try {
 			PreparedStatement insertStmnt = QueryStatementBuilder.insertStatement(t, connection);
 			int effectedRowCount = insertStmnt.executeUpdate();
@@ -23,13 +27,6 @@ public class InsertExecution<T> implements StatementExcecution<T> {
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at insert");
 		}
-	}
-
-	@Override
-	public ArrayList<T> selectExecute(Integer id, String tablename,
-			Connection connection) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

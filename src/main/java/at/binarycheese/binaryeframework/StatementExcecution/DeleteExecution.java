@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class DeleteExecution<T> implements StatementExcecution<T> {
+public class DeleteExecution<T> extends DMLStatementExecution<T> {
+
+	public DeleteExecution(Connection connection) {
+		super(connection);
+	}
 
 	@Override
-	public int execute(T t, Connection connection) {
+	public int execute(T t) {
 		try {
 			PreparedStatement deleteStmnt = QueryStatementBuilder.deleteStatement(t,
 					connection);
@@ -24,12 +28,5 @@ public class DeleteExecution<T> implements StatementExcecution<T> {
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at delete");
 		}
-	}
-
-	@Override
-	public ArrayList<T> selectExecute(Integer id, String tablename,
-			Connection connection) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

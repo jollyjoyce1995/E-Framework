@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class UpdateExecution<T> implements StatementExcecution<T> {
+public class UpdateExecution<T> extends DMLStatementExecution<T>{
+
+	public UpdateExecution(Connection connection) {
+		super(connection);
+	}
 
 	@Override
-	public int execute(T t, Connection connection) {
+	public int execute(T t) {
 		try {
 			PreparedStatement updateStmnt = QueryStatementBuilder.updateStatement(t,
 					connection);
@@ -24,12 +28,5 @@ public class UpdateExecution<T> implements StatementExcecution<T> {
 		} catch (SQLException e) {
 			throw new EFrameWorkUserIsIdiotException("Failed at update");
 		}
-	}
-
-	@Override
-	public ArrayList<T> selectExecute(Integer id, String tablename,
-			Connection connection) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
