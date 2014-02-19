@@ -1,11 +1,13 @@
 /*
- * Joachim Grüneis
+ * Joachim GrÃ¼neis
  * Copyright (C) 2013
  * All rights reserved.
  */
 package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
 
 import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
+import at.grueneis.spengergasse.lesson_plan.persistence.jdbc.LessonPlanDataAccessException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
