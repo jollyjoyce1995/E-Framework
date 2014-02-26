@@ -12,7 +12,7 @@ public class InsertExecution<T> extends DMLStatementExecution<T> {
 	}
 
 	@Override
-	public int execute(T t) {
+	public int execute(T t) throws EFrameWorkUserIsIdiotException{
 		try {
 			PreparedStatement insertStmnt = QueryStatementBuilder.insertStatement(t, connection);
 			int effectedRowCount = insertStmnt.executeUpdate();

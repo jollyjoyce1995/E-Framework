@@ -12,7 +12,7 @@ public class DeleteExecution<T> extends DMLStatementExecution<T> {
 	}
 
 	@Override
-	public int execute(T t) {
+	public int execute(T t) throws EFrameWorkUserIsIdiotException {
 		try {
 			PreparedStatement deleteStmnt = QueryStatementBuilder.deleteStatement(t,
 					connection);

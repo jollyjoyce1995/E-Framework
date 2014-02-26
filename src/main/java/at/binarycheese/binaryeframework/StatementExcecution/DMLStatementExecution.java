@@ -7,5 +7,5 @@ public abstract class DMLStatementExecution<T> extends StatementExcecution<T>{
 		super(connection);
 	}
 	
-	public abstract int execute(T t);
+	public abstract int execute(T t) throws EFrameWorkUserIsIdiotException;
 }

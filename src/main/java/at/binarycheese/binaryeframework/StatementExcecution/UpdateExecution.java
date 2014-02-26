@@ -12,7 +12,7 @@ public class UpdateExecution<T> extends DMLStatementExecution<T>{
 	}
 
 	@Override
-	public int execute(T t) {
+	public int execute(T t) throws EFrameWorkUserIsIdiotException {
 		try {
 			PreparedStatement updateStmnt = QueryStatementBuilder.updateStatement(t,
 					connection);

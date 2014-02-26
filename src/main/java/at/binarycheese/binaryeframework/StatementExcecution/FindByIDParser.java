@@ -33,7 +33,8 @@ public class FindByIDParser<T> implements QueryInputParser {
 				throw new EFrameWorkUserIsIdiotException(
 						"Exact match didn't return data");
 			}
-			T entity = T.bind(resultSet);
+			
+			T entity = Dao.bind(resultSet);
 			if (resultSet.next()) {
 				throw new EFrameWorkUserIsIdiotException(
 						"Exact returned more then one row");

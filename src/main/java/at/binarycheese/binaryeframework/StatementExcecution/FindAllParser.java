@@ -27,7 +27,7 @@ public class FindAllParser<T> implements QueryInputParser {
 					.findAllStatement(tablename, connection);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				T entity = T.bind(resultSet);
+				T entity = Dao.bind(resultSet);
 				entities.add(entity);
 			}
 			resultSet.close();
