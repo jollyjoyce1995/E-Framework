@@ -25,11 +25,25 @@ public class Registry {
 
     public EFPersistable get(Long id, Class type) {
         for (Entity e : entities) {
-            if (e.getObject().getId() == id && e.getObject().getClass() == type) {
+            if (e.getObject().getId() == id && e.getObject().getClass().equals(type)) {
                 return e.getObject();
             }
         }
         throw new EntityNotFoundException(id, type);
+    }
+
+    public void delete(EFPersistable objToDelete) throws EntityNotFoundException
+    {
+        boolean deleted = entities.remove(objToDelete);
+        if(!deleted)
+        {
+            throw new EntityNotFoundException(objToDelete.getId(), EFPersistable.class);
+        }
+    }
+
+    public void delete(Long id, Class type) throws EntityNotFoundException
+    {
+        delete(get(id, type));
     }
 
     public  List<EFPersistable> getDirtyObjects() {
