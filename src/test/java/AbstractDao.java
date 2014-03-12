@@ -1,9 +1,9 @@
-import at.eframework.AbstractDaoInterface;
+import at.eframework.TableMapper;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
-public class AbstractDao implements AbstractDaoInterface{
+public class AbstractDao implements TableMapper {
 	public ArrayList<String> getColumnNames(){
         ArrayList<String> ret = new ArrayList<String>();
         ret.add("NAME");

@@ -1,22 +1,17 @@
 import static org.junit.Assert.*;
 
-import at.eframework.AbstractDaoInterface;
-import at.eframework.QueryBuilderException;
-import at.eframework.QueryStatementBuilder;
+import at.eframework.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class QueryStatementBuilderJUnitTest {
 
     String dbName = "InfernoKeysDB";
     Connection connection;
-    AbstractDaoInterface dao;
+    TableMapper dao;
 
 
     @Before
@@ -35,14 +30,14 @@ public class QueryStatementBuilderJUnitTest {
 	@Test
 	public void testFindAllStatement() throws QueryBuilderException {
         String expected = "SELECT * FROM " + dao.tableName();
-        String result = new QueryStatementBuilder().findAllStatement(dao);
+        String result = new FindAllStatementBuilder().create(dao);
         assertEquals(expected, result);
 	}
 
     @Test
     public void testFindByIDStatement() throws QueryBuilderException {
         String expected = "SELECT * FROM " + dao.tableName() + " WHERE ID = ?";
-        String result = new QueryStatementBuilder().findByIdStatement(dao);
+        String result = new FindByIDStatementBuilder().create(dao);
         assertEquals(expected, result);
     }
 
@@ -50,7 +45,7 @@ public class QueryStatementBuilderJUnitTest {
     public void testInsertStatement() throws QueryBuilderException {
         ArrayList<String> colNames = dao.getColumnNames();
         String expected = "INSERT INTO " + dao.tableName() + " ( " + colNames.get(0) + " , " + colNames.get(1) +  " ) VALUES ( ?, ? )";
-        String result = new QueryStatementBuilder().insertStatement(dao);
+        String result = new InsertStatementBuilder().create(dao);
         assertEquals(expected, result);
     }
 
@@ -58,14 +53,14 @@ public class QueryStatementBuilderJUnitTest {
     public void testUpdateStatement() throws QueryBuilderException {
         ArrayList<String> colNames = dao.getColumnNames();
         String expected = "UPDATE " + dao.tableName() + " SET " + colNames.get(0) + " = ? , " + colNames.get(1) +  " = ? WHERE ID = ?";
-        String result = new QueryStatementBuilder().updateStatement(dao);
+        String result = new UpdateStatementBuilder().create(dao);
         assertEquals(expected, result);
     }
 
     @Test
     public void testDeleteStatement() throws QueryBuilderException {
         String expected = "DELETE FROM " + dao.tableName() + " WHERE ID = ?";
-        String result = new QueryStatementBuilder().deleteStatement(dao);
+        String result = new DeleteStatementBuilder().create(dao);
         assertEquals(expected, result);
     }
 
