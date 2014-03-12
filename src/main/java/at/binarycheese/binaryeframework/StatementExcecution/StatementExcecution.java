@@ -1,11 +1,12 @@
 package at.binarycheese.binaryeframework.StatementExcecution;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 public abstract class StatementExcecution<T> {
-	Connection connection;
-	public StatementExcecution(Connection connection){
-		this.connection = connection;
+	protected PreparedStatement statement;
+	public StatementExcecution(PreparedStatement statement){
+		this.statement = statement;
 	}
 }

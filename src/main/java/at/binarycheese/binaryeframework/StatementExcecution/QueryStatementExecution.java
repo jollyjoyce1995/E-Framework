@@ -1,20 +1,34 @@
 package at.binarycheese.binaryeframework.StatementExcecution;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class QueryStatementExecution<T> extends StatementExcecution<T>{
+import at.binarycheese.binaryeframework.StatementExcecution.DML.SelectAll;
+import at.binarycheese.binaryeframework.StatementExcecution.DML.SelectSingle;
+import at.binarycheese.binaryeframework.StatementExcecution.DML.StatementType;
 
-	public QueryStatementExecution(Connection connection) {
-		super(connection);
+public class QueryStatementExecution<T> extends StatementExcecution<T> {
+	public QueryStatementExecution(PreparedStatement statement) {
+		super(statement);
 		// TODO Auto-generated constructor stub
 	}
-	
-	public List<T> execute(QueryInputParser query){
-		return query.find();
-	}
-	
-	interface QueryInputParser{
-		List find();
+
+	public List<T> execute(StatementType type) {
+		try {
+			ResultSet resultSet = super.statement.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(type.getClass()==SelectSingle.class){
+			
+		}
+		if(type.getClass() == SelectAll.class){
+			
+		}
+		return null;
 	}
 }
