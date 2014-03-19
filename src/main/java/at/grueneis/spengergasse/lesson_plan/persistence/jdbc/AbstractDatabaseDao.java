@@ -3,41 +3,55 @@
  * Copyright (C) 2013
  * All rights reserved.
  */
-package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
 
 import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
+import at.grueneis.spengergasse.lesson_plan.persistence.jdbc.DatabaseDao;
+import at.grueneis.spengergasse.lesson_plan.persistence.jdbc.LessonPlanDataAccessException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
  * "template pattern"
  */
-public abstract class AbstractDatabaseDao<T extends BasePersistable> implements DatabaseDao<T> {
+public abstract class AbstractDatabaseDao<T extends BasePersistable> implements DatabaseDao<T>, TableMapper {
 
     private final Connection connection;
-
-    private PreparedStatement findAllStatement;
-
-    private PreparedStatement findByIdStatement;
-
-    private PreparedStatement countStatement;
-
-    private PreparedStatement insertStatement;
-
-    private PreparedStatement updateStatement;
-
-    private PreparedStatement deleteStatement;
+    private String FIND_ALL;
+    private String SELECT;
+    private String FIND_BY_ID;
+    private String INSERT;
+    private String UPDATE;
+    private String DELETE;
+    private Map<String, PreparedStatement> prepMap;
+    
 
     public AbstractDatabaseDao(Connection connection) {
         this.connection = connection;
+        FIND_ALL = "Find all Objects";
+        FIND_BY_ID = "Find Object by ID";
+        INSERT = "Insert Object";
+        UPDATE = "Update Object";
+        DELETE ="Delete Object";
+        fillMap();
     }
 
+    public void fillMap()
+    {
+    	QueryStatementFactory a = new QueryStatementFactory();
+    	prepMap.put(FIND_ALL, a.findAllStatement(this, connection));
+    	prepMap.put(FIND_BY_ID, a.FindByIdStatement(this, connection));
+    	prepMap.put(INSERT, a.InsertStatement(this, connection));
+    	prepMap.put(UPDATE, a.UpdateStatement(this, connection));
+       	prepMap.put(DELETE,  a.DeleteStatement(this, connection));
+    	
+    }
     protected Connection connection() {
         try {
             if (connection == null) {
@@ -52,126 +66,11 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
         return connection;
     }
 
-    private PreparedStatement findAllStatement() {
-        try {
-            if (findAllStatement == null) {
-                StringBuffer statementText = new StringBuffer();
-                statementText.append("SELECT ");
-                statementText.append(columnList());
-                statementText.append(" FROM ");
-                statementText.append(tableName());
-                System.out.println("Creating SQL statement: " + statementText);
-                findAllStatement = connection().prepareStatement(statementText.toString());
-            }
-            return findAllStatement;
-
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to create find all statement", e);
-        }
-    }
-
-    private PreparedStatement findByIdStatement() {
-        try {
-            if (findByIdStatement == null) {
-                StringBuffer statementText = new StringBuffer();
-                statementText.append("SELECT ");
-                statementText.append(columnList());
-                statementText.append(" FROM ");
-                statementText.append(tableName());
-                statementText.append(" WHERE ");
-                statementText.append(idColumnName()).append(" = ? ");
-                System.out.println("Creating SQL statement: " + statementText);
-                findByIdStatement = connection().prepareStatement(statementText.toString());
-            }
-            return findByIdStatement;
-
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to create find by id statement", e);
-        }
-    }
-
-    private PreparedStatement insertStatement() {
-        try {
-            if (insertStatement == null) {
-                StringBuffer statementText = new StringBuffer();
-                statementText.append("INSERT INTO ").append(tableName()).append(" ( ");
-                for (String columnName : otherColumnNames()) {
-                    statementText.append(columnName).append(" , ");
-                }
-                statementText.append(idColumnName());
-                statementText.append(" ) ");
-                statementText.append(" VALUES ( ");
-                for (String columnName : otherColumnNames()) {
-                    statementText.append(" ?, ");
-                }
-                statementText.append(" ? "); // id column
-                statementText.append(" ) ");
-                System.out.println("Creating SQL statement: " + statementText);
-                insertStatement = connection().prepareStatement(statementText.toString());
-            }
-            return insertStatement;
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to create insert statement", e);
-        }
-    }
-
-    private PreparedStatement updateStatement() {
-        try {
-            if (updateStatement == null) {
-                StringBuffer statementText = new StringBuffer();
-                statementText.append("UPDATE ").append(tableName());
-                statementText.append(" SET ");
-                int count = 0;
-                for (String columnName : otherColumnNames()) {
-                    count++;
-                    statementText.append(" ").append(columnName).append(" = ? ");
-                    if (count < otherColumnNames().length) {
-                        statementText.append(" , ");
-                    }
-                }
-                statementText.append(" WHERE ").append(idColumnName()).append(" = ? ");
-                System.out.println("Creating SQL statement: " + statementText);
-                updateStatement = connection().prepareStatement(statementText.toString());
-            }
-            return updateStatement;
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to create update statement", e);
-        }
-    }
-
-    private PreparedStatement deleteStatement() {
-        try {
-            if (deleteStatement == null) {
-                StringBuffer statementText = new StringBuffer();
-                statementText.append("DELETE FROM ").append(tableName());
-                statementText.append(" WHERE ").append(idColumnName()).append(" = ? ");
-                System.out.println("Creating SQL statement: " + statementText);
-                deleteStatement = connection().prepareStatement(statementText.toString());
-            }
-            return deleteStatement;
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to create delete statement", e);
-        }
-    }
-
-    private PreparedStatement countStatement() {
-        try {
-            if (countStatement == null) {
-                StringBuffer statementText = new StringBuffer();
-                statementText.append("SELECT COUNT(*) FROM ").append(tableName());
-                System.out.println("Creating SQL statement: " + statementText);
-                deleteStatement = connection().prepareStatement(statementText.toString());
-            }
-            return countStatement;
-        }
-        catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to create count statement", e);
-        }
-    }
-
+   
+    
     protected abstract String idColumnName();
 
-    protected abstract String[] otherColumnNames();
+    protected abstract ArrayList<String> otherColumnNames();
 
     private String columnList() {
         StringBuffer columnList = new StringBuffer();
@@ -188,125 +87,44 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
     protected abstract void setValuesOfOtherColumnsIntoStatment(PreparedStatement preparedStatement, T entity);
 
-    @Override
     public final List<T> findAll() {
-        try {
-            List<T> entities = new ArrayList<>();
-            PreparedStatement statement = findAllStatement();
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                T entity = bind(resultSet);
-                entities.add(entity);
-            }
-            resultSet.close();
-            return entities;
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed to fetch all entities", e);
-        }
+       QueryStatementExcecution<T> a = new QueryStatementExcecution<T>(prepMap.get(FIND_ALL), new SelectAll());
+    		   a.excecute()
     }
 
-    @Override
     public final T findById(Long id) {
-        try {
-            PreparedStatement findByIdStatement = findByIdStatement();
-            findByIdStatement.setLong(1, id);
-            ResultSet resultSet = findByIdStatement.executeQuery();
-            if (!resultSet.next()) {
-                throw new LessonPlanDataAccessException("Exact match didn't return data");
-            }
-            T entity = bind(resultSet);
-            if (resultSet.next()) {
-                throw new LessonPlanDataAccessException("Exact returned more then one row");
-            }
-            return entity;
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed at findById query", e);
-        }
+    	 QueryStatementExcecution<T> a = new QueryStatementExcecution<T>(prepMap.get(FIND_BY_ID), new SelectSingle());
     }
 
-    @Override
     public void save(T t) {
         if (t.getId() == null) {
-            insert(t);
+        	
+        	t.setId(idGen);
+        	DMLStatementExceution<T> a = new DMLStatementExceution<T>(prepMap.get(INSERT)),new Insert());
+        	a.execute(t);
         } else {
-            update(t);
+        	DMLStatementExceution<T> a = new MLStatementExceution<T>(prepMap.get(UPDATE)),new Update());
+        	a.execute(t);
+
         }
     }
 
-    private void insert(T t) {
-        try {
-            PreparedStatement insertStmnt = insertStatement();
-            Long newId = generateNewId();
-            t.setId(newId);
-            setValuesOfOtherColumnsIntoStatment(insertStmnt, t);
-            insertStmnt.setLong(otherColumnNames().length + 1, t.getId());
-            int effectedRowCount = insertStmnt.executeUpdate();
-            if (effectedRowCount == 0) {
-                throw  new LessonPlanDataAccessException("Insert did not insert a row.");
-            } else if (effectedRowCount != 1) {
-                throw  new LessonPlanDataAccessException("Insert inserted more then one row.");
-            }
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed at insert", e);
-        }
-    }
-
-    private void update(T t) {
-        try {
-            PreparedStatement updateStmnt = updateStatement();
-            setValuesOfOtherColumnsIntoStatment(updateStmnt, t);
-            updateStmnt.setLong(otherColumnNames().length + 1, t.getId());
-            int effectedRowCount = updateStmnt.executeUpdate();
-            if (effectedRowCount == 0) {
-                throw  new LessonPlanDataAccessException("Update did not find a matching row.");
-            } else if (effectedRowCount != 1) {
-                throw  new LessonPlanDataAccessException("Update found more then one row to delete.");
-            }
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed at update", e);
-        }
-    }
-
-    @Override
+    
     public void delete(T t) {
-        delete(t.getId());
+    	DMLStatementExceution<T> a = new MLStatementExceution<T>(prepMap.get(DELETE)),new Delete());
+    	a.execute(t);
     }
 
-    @Override
     public void delete(Long id) {
-        try {
-            PreparedStatement deleteStmnt = deleteStatement();
-            deleteStmnt.setLong(1, id);
-            int effectedRowCount = deleteStmnt.executeUpdate();
-            if (effectedRowCount == 0) {
-                throw  new LessonPlanDataAccessException("Delete did not find a matching row.");
-            } else if (effectedRowCount != 1) {
-                throw  new LessonPlanDataAccessException("Exact delete found more then one row to delete.");
-            }
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed at delete", e);
-        }
+    	T t = new T();
+    	t.setId(id);
+    	DMLStatementExceution<T> a = new MLStatementExceution<T>(prepMap.get(DELETE)),new Delete());
+    	a.execute(t);
+        
     }
 
-    @Override
-    public Long count() {
-        try {
-            PreparedStatement countStatement = countStatement();
-            ResultSet resultSet = countStatement.executeQuery();
-            if (!resultSet.next()) {
-                throw new LessonPlanDataAccessException("Count didn't return data");
-            }
-            Long count = resultSet.getLong(1);
-            if (resultSet.next()) {
-                throw new LessonPlanDataAccessException("Count returned more then one row");
-            }
-            return count;
-        } catch (SQLException e) {
-            throw new LessonPlanDataAccessException("Failed at count query", e);
-        }
-    }
+    protected abstract PreparedStatement addValuesToStatement(PreparedStatement P);
+    protected abstract PreparedStatement addValuesANDIDToStatement(PreparedStatement P);
 
-    private Long generateNewId() {
-        return new Random().nextLong();
-    }
+
 }
