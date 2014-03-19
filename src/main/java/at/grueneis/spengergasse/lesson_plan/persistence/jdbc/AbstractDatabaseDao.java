@@ -24,7 +24,6 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
     private final Connection connection;
     private String FIND_ALL;
-    private String SELECT;
     private String FIND_BY_ID;
     private String INSERT;
     private String UPDATE;
