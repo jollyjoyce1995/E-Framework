@@ -10,11 +10,11 @@ import at.binarycheese.binaryeframework.StatementExcecution.DML.Insert;
 import at.binarycheese.binaryeframework.StatementExcecution.DML.Update;
 
 public class DMLStatementExecution<T> extends StatementExcecution<T> {
-	public DMLStatementExecution(PreparedStatement statement) {
+	public DMLStatementExecution(PreparedStatement statement, StatementType dml) {
 		super(statement);
 	}
 
-	public int execute(T t, StatementType dml) throws EFrameWorkUserIsIdiotException {
+	public int execute(T t) throws EFrameWorkUserIsIdiotException {
 		if (dml.getClass() == Insert.class) {
 
 		}

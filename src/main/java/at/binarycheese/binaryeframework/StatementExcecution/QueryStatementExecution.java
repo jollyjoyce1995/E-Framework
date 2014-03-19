@@ -11,12 +11,12 @@ import at.binarycheese.binaryeframework.StatementExcecution.DML.SelectSingle;
 import at.binarycheese.binaryeframework.StatementExcecution.DML.StatementType;
 
 public class QueryStatementExecution<T> extends StatementExcecution<T> {
-	public QueryStatementExecution(PreparedStatement statement) {
+	public QueryStatementExecution(PreparedStatement statement, StatementType type) {
 		super(statement);
 		// TODO Auto-generated constructor stub
 	}
 
-	public List<T> execute(StatementType type) {
+	public List<T> execute() {
 		try {
 			ResultSet resultSet = super.statement.executeQuery();
 		} catch (SQLException e) {
