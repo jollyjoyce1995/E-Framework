@@ -88,11 +88,13 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
     public final List<T> findAll() {
        QueryStatementExcecution<T> a = new QueryStatementExcecution<T>(prepMap.get(FIND_ALL), new SelectAll());
-    		   a.excecute()
+       return a.execute();
+       
     }
 
     public final T findById(Long id) {
     	 QueryStatementExcecution<T> a = new QueryStatementExcecution<T>(prepMap.get(FIND_BY_ID), new SelectSingle());
+    	 return a.execute(id);
     }
 
     public void save(T t) {
