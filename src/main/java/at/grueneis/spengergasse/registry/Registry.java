@@ -10,43 +10,100 @@ import java.util.List;
  */
 public class Registry {
 
-    private static ArrayList<Entity> entities = new ArrayList<Entity>();
+    private ArrayList<Entity> entities = new ArrayList<Entity>();
+	private static Registry instance;
 
-    public static void add(EFPersistable objectToAdd) throws EntityAlreadyAddedException {
-        if (!entities.contains(new Entity(objectToAdd))) {
-            entities.add(new Entity(objectToAdd));
-        } else {
-            throw new EntityAlreadyAddedException(objectToAdd);
+    public void add(EFPersistable objectToAdd) throws EntityAlreadyAddedException {
+        if (objectToAdd != null) {
+            if (!entities.contains(new Entity(objectToAdd))) {
+                entities.add(new Entity(objectToAdd));
+            } else {
+                throw new EntityAlreadyAddedException(objectToAdd);
+            }
         }
     }
 
-    public static EFPersistable get(Long id, Class<EFPersistable> type) {
+    public EFPersistable get(Long id, Class type) {
         for (Entity e : entities) {
-            if (e.getObject().getId() == id) {
+            if (e.getObject().getId() == id && e.getObject().getClass().equals(type)) {
                 return e.getObject();
             }
         }
         throw new EntityNotFoundException(id, type);
     }
 
-    public static List<EFPersistable> getDirtyObjects() {
-        ArrayList<EFPersistable> dirtyEntities = new ArrayList<>();
-        for(Entity entity: entities)
+    public void delete(EFPersistable objToDelete) throws EntityNotFoundException
+    {
+        boolean deleted = entities.remove(objToDelete);
+        if(!deleted)
         {
-            if(entity.isObjectDirty())
+            throw new EntityNotFoundException(objToDelete.getId(), EFPersistable.class);
+        }
+    }
+
+    public void delete(Long id, Class type) throws EntityNotFoundException
+    {
+        delete(get(id, type));
+    }
+
+    public  List<EFPersistable> getDirtyObjects() {
+        ArrayList<EFPersistable> dirtyEntities = new ArrayList<>();
+        for (Entity entity : entities) {
+            if (entity.isObjectDirty())
                 dirtyEntities.add(entity.getObject());
         }
 
-        return Collections.unmodifiableList(dirtyEntities) ;
+        return Collections.unmodifiableList(dirtyEntities);
     }
 
-    public static void forceAdd(EFPersistable objectToAdd) {
-        if (entities.contains(objectToAdd)) {
-            entities.remove(new Entity(objectToAdd));
+    public  void forceAdd(EFPersistable objectToAdd) {
+        Entity oldEntity = getEntityObject(objectToAdd);
+        if (oldEntity != null) {
+            entities.remove(oldEntity);
+            Entity newEntity = new Entity(objectToAdd);
+            if (!oldEntity.compareWithOtherEntity(newEntity))
+                newEntity.markDirty();
+            entities.add(newEntity);
+        } else {
+            entities.add(new Entity(objectToAdd));
         }
-        Entity newEntity = new Entity(objectToAdd);
-        newEntity.markDirty();
-        entities.add(newEntity);
+    }
+
+    private  Entity getEntityObject(EFPersistable obj) {
+        for (Entity e : entities) {
+            if (e.getObject().getId().equals(obj.getId()) && e.getObject().getClass().equals(obj.getClass()))
+                return e;
+        }
+        return null;
+    }
+
+    public  void emptyRegistry() {
+        entities = new ArrayList<Entity>();
+    }
+
+    public  void clean(EFPersistable entity) {
+        if (entity != null) {
+            Entity entityToClean = getEntityObject(entity);
+            if(entityToClean != null){
+                entityToClean.markClean();
+            }
+            else{
+                throw new EntityNotFoundException((long)-1, EFPersistable.class);
+            }
+
+        } else {
+            throw new EntityNotFoundException((long)-1, EFPersistable.class);
+        }
 
     }
+
+    public  void clean(List<EFPersistable> list){
+        for(EFPersistable e : list){
+            clean(e);
+        }
+    }
+
+	public static Registry getInstance() {
+		return instance != null ? instance : (instance = new Registry());
+	}
 }
