@@ -29,14 +29,14 @@ public class QueryStatementBuilderJUnitTest {
 
 	@Test
 	public void testFindAllStatement() throws QueryBuilderException {
-        String expected = "SELECT * FROM " + dao.tableName();
+        String expected = "SELECT ID, NAME, DESCRIPTION FROM " + dao.tableName();
         String result = new FindAllStatementBuilder().create(dao);
         assertEquals(expected, result);
 	}
 
     @Test
     public void testFindByIDStatement() throws QueryBuilderException {
-        String expected = "SELECT * FROM " + dao.tableName() + " WHERE ID = ?";
+        String expected = "SELECT ID, NAME, DESCRIPTION FROM " + dao.tableName() + " WHERE ID = ?";
         String result = new FindByIDStatementBuilder().create(dao);
         assertEquals(expected, result);
     }
@@ -44,7 +44,7 @@ public class QueryStatementBuilderJUnitTest {
     @Test
     public void testInsertStatement() throws QueryBuilderException {
         ArrayList<String> colNames = dao.getColumnNames();
-        String expected = "INSERT INTO " + dao.tableName() + " ( " + colNames.get(0) + " , " + colNames.get(1) +  " ) VALUES ( ?, ? )";
+        String expected = "INSERT INTO " + dao.tableName() + " (ID , " + colNames.get(0) + " , " + colNames.get(1) +  " ) VALUES (?, ?, ? )";
         String result = new InsertStatementBuilder().create(dao);
         assertEquals(expected, result);
     }
