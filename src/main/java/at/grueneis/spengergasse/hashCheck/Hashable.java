@@ -3,7 +3,7 @@ package at.grueneis.spengergasse.hashCheck;
 /**
  * Created by Felix on 02.04.2014.
  */
-public abstract class HashableX {
+public abstract class Hashable {
     private String md5Hash;
 
 /**
