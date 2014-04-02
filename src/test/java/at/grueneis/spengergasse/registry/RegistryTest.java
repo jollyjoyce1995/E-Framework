@@ -1,6 +1,5 @@
 package at.grueneis.spengergasse.registry;
 
-import at.grueneis.spengergasse.lesson_plan.domain.Lesson;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
