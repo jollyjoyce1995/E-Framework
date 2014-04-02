@@ -1,0 +1,2 @@
+1. Primary Key is always named ID and of the datatype int16
+2. Foreign key is always named ID_Tablename and has to be after the primary key but before the other columns
