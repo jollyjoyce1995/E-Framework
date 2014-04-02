@@ -259,7 +259,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
             PreparedStatement insertStmnt = insertStatement();
             Long newId = generateNewId();
             t.setId(newId);
-            t.updateMd5Hash();
+          //  t.updateMd5Hash();
             setValuesOfOtherColumnsIntoStatment(insertStmnt, t);
             insertStmnt.setLong(otherColumnNames().length + 1, t.getId());
             int effectedRowCount = insertStmnt.executeUpdate();
@@ -287,7 +287,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
         try {
             PreparedStatement updateStmnt = updateStatement();
             String oldMd5fromToHash = t.getMd5Hash();
-            t.updateMd5Hash();
+           // t.updateMd5Hash();
             setValuesOfOtherColumnsIntoStatment(updateStmnt, t);
             updateStmnt.setLong(otherColumnNames().length + 1, t.getId());
 //            updateStmnt.setLong(otherColumnNames().length + 2, t.getId());

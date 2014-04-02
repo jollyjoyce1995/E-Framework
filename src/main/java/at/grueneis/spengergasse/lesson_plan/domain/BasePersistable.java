@@ -71,24 +71,4 @@ public abstract class BasePersistable {
      * @return String[]: Returns a Stringarray containing the values of all attributes. (1 element per attribute). 
      */
     public abstract String[] getAllAttributesAsString();
-    
-   
-    
-    private String calculateMd5Hash(){
-    	try {
-			MessageDigest md5Generator = MessageDigest.getInstance("MD5");
-			String str = "";
-			for(String s : getAllAttributesAsString()){
-				str += s;
-			}
-			byte[] md5bytes = md5Generator.digest(str.getBytes());
-			return new String(md5bytes);
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("Failed to generate md5Hash of basePersistable with id " + getId(),e);
-		}
-    }
-    
-    public void updateMd5Hash(){
-    	setMd5Hash(calculateMd5Hash());
-    }
 }
