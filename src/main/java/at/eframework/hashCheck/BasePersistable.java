@@ -1,4 +1,4 @@
-package at.grueneis.spengergasse.hashCheck;
+package at.eframework.hashCheck;
 
 /**
  * Created by Felix on 02.04.2014.

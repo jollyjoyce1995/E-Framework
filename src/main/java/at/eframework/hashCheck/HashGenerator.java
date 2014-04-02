@@ -1,4 +1,4 @@
-package at.grueneis.spengergasse.hashCheck;
+package at.eframework.hashCheck;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

@@ -1,7 +1,9 @@
-package at.grueneis.spengergasse.hashCheck;
+package at.eframework.hashCheck;
 
 import static org.junit.Assert.*;
 
+import at.eframework.hashCheck.HashGenerator;
+import at.eframework.hashCheck.Hashable;
 import org.junit.Before;
 import org.junit.Test;
 

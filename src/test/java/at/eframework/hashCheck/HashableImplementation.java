@@ -1,4 +1,7 @@
-package at.grueneis.spengergasse.hashCheck;
+package at.eframework.hashCheck;
+
+import at.eframework.hashCheck.HashGenerator;
+import at.eframework.hashCheck.Hashable;
 
 /**
  * Created by Felix on 02.04.2014.
