@@ -1,3 +1,5 @@
+package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
+
 /*
  * Joachim Grüneis
  * Copyright (C) 2013
