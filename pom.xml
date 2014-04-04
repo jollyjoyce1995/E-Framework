@@ -45,8 +45,8 @@
     <!-- <dependencyManagement>...</dependencyManagement> -->
     <!-- <modules>...</modules> -->
     <properties>
-        <jdk.version>1.7</jdk.version>
-        <jacoco.version>0.6.3.201306030806</jacoco.version>
+        <jdk.version>1.8</jdk.version>
+        <jacoco.version>0.7.0.201403182114</jacoco.version>
         <jacoco.ut.execution.data.file>${project.build.directory}/coverage-reports/jacoco-ut.exec
         </jacoco.ut.execution.data.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -201,25 +201,21 @@
                     <!-- <packageNamesLocation>com/mycompany/checks/packagenames.xml</packageNamesLocation> -->
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <linkXref>true</linkXref>
-                    <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
-                    <minimumTokens>100</minimumTokens>
-                    <targetJdk>${jdk.version}</targetJdk>
-                    <!-- <excludes> <exclude>**/*Bean.java</exclude> <exclude>**/generated/*.java</exclude>
-                        </excludes> <excludeRoots> <excludeRoot>target/generated-sources/stubs</excludeRoot>
-                        </excludeRoots> -->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.2</version>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-pmd-plugin</artifactId>-->
+                <!--<version>3.1</version>-->
+                <!--<configuration>-->
+                    <!--<linkXref>true</linkXref>-->
+                    <!--<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>-->
+                    <!--<minimumTokens>100</minimumTokens>-->
+                    <!--<targetJdk>${jdk.version}</targetJdk>-->
+                    <!--&lt;!&ndash; <excludes> <exclude>**/*Bean.java</exclude> <exclude>**/generated/*.java</exclude>-->
+                        <!--</excludes> <excludeRoots> <excludeRoot>target/generated-sources/stubs</excludeRoot>-->
+                        <!--</excludeRoots> &ndash;&gt;-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+            <!--y-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jdepend-maven-plugin</artifactId>

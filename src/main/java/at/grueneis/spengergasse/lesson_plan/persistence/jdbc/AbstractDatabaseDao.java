@@ -6,13 +6,13 @@ package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
  * All rights reserved.
  */
 
+import at.eframework.QueryBuilderException;
+import at.eframework.QueryStatementFactory;
+import at.eframework.TableMapper;
 import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
 import at.grueneis.spengergasse.lesson_plan.persistence.jdbc.DatabaseDao;
 import at.grueneis.spengergasse.lesson_plan.persistence.jdbc.LessonPlanDataAccessException;
-import at.grueneis.spengergasse.registry.EFPersistable;
-import at.grueneis.spengergasse.registry.EntityAlreadyAddedException;
-import at.grueneis.spengergasse.registry.EntityNotFoundException;
-import at.grueneis.spengergasse.registry.Registry;
+import at.grueneis.spengergasse.registry.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -39,7 +39,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     private Class type;
     
 
-    public AbstractDatabaseDao(Connection connection) {
+    public AbstractDatabaseDao(Connection connection) throws QueryBuilderException {
         this.connection = connection;
         FIND_ALL = "Find all Objects";
         FIND_BY_ID = "Find Object by ID";
@@ -50,14 +50,14 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
         this.type = ((Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
     }
 
-    public void fillMap()
+    public void fillMap() throws QueryBuilderException
     {
     	QueryStatementFactory a = new QueryStatementFactory();
     	prepMap.put(FIND_ALL, a.findAllStatement(this, connection));
-    	prepMap.put(FIND_BY_ID, a.FindByIdStatement(this, connection));
-    	prepMap.put(INSERT, a.InsertStatement(this, connection));
-    	prepMap.put(UPDATE, a.UpdateStatement(this, connection));
-       	prepMap.put(DELETE,  a.DeleteStatement(this, connection));
+    	prepMap.put(FIND_BY_ID, a.findByIdStatement(this, connection));
+    	prepMap.put(INSERT, a.insertStatement(this, connection));
+    	prepMap.put(UPDATE, a.updateStatement(this, connection));
+       	prepMap.put(DELETE,  a.deleteStatement(this, connection));
     	
     }
     protected Connection connection() {
@@ -89,7 +89,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
         return columnList.toString();
     }
 
-    protected abstract String tableName();
+    public abstract String tableName();
 
     protected abstract T bind(ResultSet resultSet);
 
@@ -115,17 +115,13 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     	 
     }
 
-    public void save(T t) {
-        if (t.getId() == null) {
-        try{	
+    public void save(T t) throws EntityAlreadyAddedException{
+        if (t.getId() == null) {	
         	//t.setId(idGen);
         	Registry.getInstance().add((EFPersistable)t);
         	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(INSERT)),new Insert());
         	a.execute(t);
-        }
-        catch(EntityAlreadyAddedException e){
-        	System.err.print("Object is already in the Registry");     	
-        }
+      
         } else {
         	Registry.getInstance().forceAdd((EFPersistable)t);
         	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(UPDATE)),new Update());
@@ -135,34 +131,24 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     }
 
     
-    public void delete(T t) {
-    	try{
+    public void delete(T t) throws EntityNotFoundException {
+    	
     		Registry.getInstance().delete((EFPersistable)t);
     		DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(DELETE)),new Delete());
     		a.execute(t);
-    	}
-    	catch(EntityNotFoundException e)
-    	{
-    		System.err.print("Das Objekt ist nicht in der Registry enthalten");
-    	}
+    	
     }
 
-    public void delete(Long id) {
-    	try{
+    public void delete(Long id) throws EntityNotFoundException {
+    	
     		Registry.getInstance().delete(id, type);
     		T t = findById(id);
     		DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(DELETE)),new Delete());
-    		a.execute(t);
-    	}
-    	catch(EntityNotFoundException e){
-    		System.err.print("Die ID existiert im Registry nicht");
-    	}
-    		
-    	
+    		a.execute(t);  	
         
     }
 
-    protected abstract PreparedStatement addValuesToStatement(PreparedStatement P);
+    public abstract PreparedStatement addValuesToStatement(PreparedStatement P);
     protected abstract PreparedStatement addValuesANDIDToStatement(PreparedStatement P);
 
 
