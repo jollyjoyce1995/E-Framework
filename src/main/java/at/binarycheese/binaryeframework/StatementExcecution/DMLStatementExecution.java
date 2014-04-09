@@ -19,7 +19,7 @@ public class DMLStatementExecution<T> extends StatementExcecution<T> {
 
 	public int execute(T t) throws EFrameWorkUserIsIdiotException {
 		if (dml.getClass() == Insert.class) {
-
+			
 		}
 		if (dml.getClass() == Update.class) {
 
