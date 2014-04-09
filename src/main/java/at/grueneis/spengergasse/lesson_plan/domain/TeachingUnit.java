@@ -51,13 +51,5 @@ public class TeachingUnit extends BasePersistable implements Serializable {
         return "TeachingUnit [uuid=" + uuid + "]";
     }
 
-	@Override
-	public String[] getAllAttributesAsString() {
-//		    private final UUID uuid;
-//		    private final String name;
-		return new String[]{
-				uuid.toString(),
-				name
-		};
-	}
+
 }

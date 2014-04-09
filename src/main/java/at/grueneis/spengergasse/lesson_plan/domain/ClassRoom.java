@@ -72,13 +72,5 @@ public class ClassRoom extends BasePersistable{
                 + building + "]";
     }
 
-	@Override
-	public String[] getAllAttributesAsString() {
-//		    private final String name;
-//		    private final String floor;
-//		    private final String building;
-		return new String[]{
-				name, floor, building
-		};
-	}
+
 }

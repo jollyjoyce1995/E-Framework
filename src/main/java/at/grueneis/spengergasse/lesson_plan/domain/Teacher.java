@@ -32,7 +32,7 @@ public class Teacher extends BasePersistable implements Serializable {
         this.lastname = lastname;
         this.birthdate = birthdate;
         this.email = email;
-        this.setMd5Hash(md5Hash);
+    //    this.setMd5Hash(md5Hash);
     }
 
     public Teacher(String firstname, String lastname, Date birthdate,
@@ -71,17 +71,4 @@ public class Teacher extends BasePersistable implements Serializable {
                 + birthdate + ", email=" + email + "]";
     }
 
-	@Override
-	public String[] getAllAttributesAsString() {
-//		private final String firstname;
-//	    private final String lastname;
-//	    private Date birthdate;
-//	    private final String email;
-		return new String[]{
-			firstname,
-			lastname,
-			birthdate.toString(),
-			email
-		};
-	}
 }

@@ -278,7 +278,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     	try {
     		PreparedStatement findHashByIdStmnt = hashByIdStatement();
 			findHashByIdStmnt.setLong(1, t.getId());
-			findHashByIdStmnt.setString(2, t.getMd5Hash());
+			//findHashByIdStmnt.setString(2, t.getMd5Hash());
 			boolean hashFound = findHashByIdStmnt.executeQuery().first();
 			if(!hashFound) throw new LessonPlanDataAccessException("Failed at update because the entity has been changed in DB since last loading");
 		} catch (SQLException e1) {
@@ -286,7 +286,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 		}
         try {
             PreparedStatement updateStmnt = updateStatement();
-            String oldMd5fromToHash = t.getMd5Hash();
+        //    String oldMd5fromToHash = t.getMd5Hash();
            // t.updateMd5Hash();
             setValuesOfOtherColumnsIntoStatment(updateStmnt, t);
             updateStmnt.setLong(otherColumnNames().length + 1, t.getId());

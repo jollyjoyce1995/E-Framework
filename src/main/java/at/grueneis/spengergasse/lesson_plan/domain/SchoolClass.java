@@ -43,10 +43,4 @@ public class SchoolClass extends BasePersistable{
         return "SchoolClass [name=" + name + "]";
     }
 
-	@Override
-	public String[] getAllAttributesAsString() {
-		return new String[]{
-			name
-		};
-	}
 }

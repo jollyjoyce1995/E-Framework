@@ -1,7 +1,5 @@
 package at.grueneis.spengergasse.hashCheck;
 
-import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -10,17 +8,17 @@ import java.security.NoSuchAlgorithmException;
  */
 public class HashGenerator{
 
-    public String generateMd5Hash(BasePersistable basePersistable){
+    public static String generateMd5Hash(Hashable hashable){
         try {
             MessageDigest md5Generator = MessageDigest.getInstance("MD5");
             String str = "";
-            for(String s : basePersistable.getAllAttributesAsString()){
+            for(String s : hashable.getAllAttributesAsString()){
                 str += s;
             }
             byte[] md5bytes = md5Generator.digest(str.getBytes());
             return new String(md5bytes);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Failed to generate md5Hash of basePersistable with id " + basePersistable.getId(),e);
+            throw new RuntimeException("Failed to generate md5Hash of hashable with id " + hashable.getId(),e);
         }
     }
 }

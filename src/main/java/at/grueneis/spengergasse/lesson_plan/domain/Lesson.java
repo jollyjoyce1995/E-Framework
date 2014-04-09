@@ -93,17 +93,5 @@ public class Lesson extends BasePersistable{
                     + " must not be null");
     }
 
-	@Override
-	public String[] getAllAttributesAsString() {
-//		 	private final TeachingUnit teachingUnit;
-//		    private final Teacher teacher;
-//		    private final ClassRoom classRoom;
-//		    private final SchoolClass schoolClass;
-		return new String[]{
-			""+teachingUnit.getId(),
-			""+teacher.getId(),
-			""+classRoom.getId(),
-			""+schoolClass.getId()
-		};
-	}
+
 }

@@ -73,15 +73,5 @@ public class SchoolYear extends BasePersistable{
                 + "]";
     }
 
-	@Override
-	public String[] getAllAttributesAsString() {
-//		    private final String name;
-//		    private final Date start;
-//		    private final Date end;
-		return new String[]{
-				name, 
-				start.toString(),
-				end.toString()
-		};
-	}
+
 }

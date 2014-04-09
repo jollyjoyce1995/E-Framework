@@ -7,41 +7,27 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HashGenerationTest {
-	private BasePersistable base0;
-	private BasePersistable base1;
+	private Hashable base0;
+	private Hashable base1;
     private HashGenerator hashGenerator;
 	
 	@Before
 	public void init(){
         hashGenerator = new HashGenerator();
-		base0 = new BasePersistable() {
-			private int integer  = 100;
-			private String string = "Name";
-			@Override
-			public String[] getAllAttributesAsString() {
-				return new String[]{""+this.getId(), ""+integer, string};
-			}
-		};
+		base0 = new HashableImplementation();
 		base0.setId(0l);
-		base0.setMd5Hash(hashGenerator.generateMd5Hash(base0));
-		
-		base1 = new BasePersistable() {
-			private int integer  = 100;
-			private String string = "Name";
-			@Override
-			public String[] getAllAttributesAsString() {
-				return new String[]{""+this.getId(), ""+integer, string};
-			}
-		};
+        base0.updateMd5Hash();
+
+		base1 = new HashableImplementation();
 		base1.setId(0l);
-        base1.setMd5Hash(hashGenerator.generateMd5Hash(base1));
+        base1.updateMd5Hash();
     }
 	
 	@Test
 	public void hashEqualWithoutChanges(){
-        base0.setMd5Hash(hashGenerator.generateMd5Hash(base0));
+        base0.updateMd5Hash();
 		String hash0 = base0.getMd5Hash();
-        base0.setMd5Hash(hashGenerator.generateMd5Hash(base0));
+        base0.updateMd5Hash();
 		assertTrue(hash0.equals(base0.getMd5Hash()));
 	}
 	
@@ -53,7 +39,7 @@ public class HashGenerationTest {
 	@Test
 	public void hashNotEquivalentAfterChanges(){
 		base0.setId(10l);
-        base0.setMd5Hash(hashGenerator.generateMd5Hash(base0));
+        base0.updateMd5Hash();
 		assertFalse(base0.getMd5Hash().equals(base1.getMd5Hash()));
 	}
 	

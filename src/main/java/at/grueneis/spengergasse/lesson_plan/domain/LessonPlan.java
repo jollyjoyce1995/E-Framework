@@ -31,17 +31,4 @@ public class LessonPlan extends BasePersistable {
         // return returnList;
         return Collections.unmodifiableCollection(lessons);
     }
-
-	@Override
-	public String[] getAllAttributesAsString() {
-//		private final String name;
-//	    private final SchoolYear schoolYear;
-//	    private final List<Lesson> lessons;
-		ArrayList<String> arrayList = new ArrayList<String>();
-		arrayList.add(name);
-		arrayList.add(""+schoolYear.getId());
-		for(Lesson l : lessons) arrayList.add(""+l.getId());
-		
-		return (String[]) arrayList.toArray();
-	}
 }
