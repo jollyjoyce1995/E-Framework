@@ -6,6 +6,14 @@ package at.grueneis.spengergasse.lesson_plan.persistence.jdbc;
  * All rights reserved.
  */
 
+import at.binarycheese.binaryeframework.StatementExcecution.DMLStatementExecution;
+import at.binarycheese.binaryeframework.StatementExcecution.EFrameWorkUserIsIdiotException;
+import at.binarycheese.binaryeframework.StatementExcecution.PersistableBindAndMap;
+import at.binarycheese.binaryeframework.StatementExcecution.QueryStatementExecution;
+import at.binarycheese.binaryeframework.StatementExcecution.DML.Delete;
+import at.binarycheese.binaryeframework.StatementExcecution.DML.Insert;
+import at.binarycheese.binaryeframework.StatementExcecution.DML.Update;
+import at.grueneis.spengergasse.lesson_plan.domain.BasePersistable;
 import at.eframework.QueryBuilderException;
 import at.eframework.QueryStatementFactory;
 import at.eframework.TableMapper;
@@ -101,15 +109,12 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
        
     }
 
-    public final T findById(Long id) {
-    	try{
+    public final T findById(Long id) throws EntityNotFoundException{
+    	
     		Registry.getInstance().get(id, type);
     		QueryStatementExecution<T> a = new QueryStatementExecution<T>(prepMap.get(FIND_BY_ID), this);
        	 	return a.executeSingle(id);
-    	}
-    	catch(EntityNotFoundException e){
-    		System.err.print("Das Objekt mit dieser ID ist nicht in der Registry");
-    	}
+    	
     	
     	
     	 
@@ -119,13 +124,23 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
         if (t.getId() == null) {	
         	//t.setId(idGen);
         	Registry.getInstance().add((EFPersistable)t);
-        	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(INSERT)),new Insert());
-        	a.execute(t);
+        	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(INSERT),new Insert());
+        	try {
+				a.execute(t);
+			} catch (EFrameWorkUserIsIdiotException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
       
         } else {
         	Registry.getInstance().forceAdd((EFPersistable)t);
-        	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(UPDATE)),new Update());
-        	a.execute(t);
+        	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(UPDATE),new Update());
+        	try {
+				a.execute(t);
+			} catch (EFrameWorkUserIsIdiotException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
         }
     }
@@ -134,8 +149,13 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     public void delete(T t) throws EntityNotFoundException {
     	
     		Registry.getInstance().delete((EFPersistable)t);
-    		DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(DELETE)),new Delete());
-    		a.execute(t);
+    		DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(DELETE),new Delete());
+    		try {
+				a.execute(t);
+			} catch (EFrameWorkUserIsIdiotException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	
     }
 
@@ -143,8 +163,13 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     	
     		Registry.getInstance().delete(id, type);
     		T t = findById(id);
-    		DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(DELETE)),new Delete());
-    		a.execute(t);  	
+    		DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(DELETE),new Delete());
+    		try {
+				a.execute(t);
+			} catch (EFrameWorkUserIsIdiotException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}  	
         
     }
 
@@ -153,3 +178,4 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
 
 }
+
