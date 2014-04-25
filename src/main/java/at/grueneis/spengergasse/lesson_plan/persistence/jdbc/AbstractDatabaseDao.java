@@ -91,12 +91,12 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
     public abstract String tableName();
 
-    protected abstract T bind(ResultSet resultSet);
+    public abstract T bind(ResultSet resultSet);
 
     protected abstract void setValuesOfOtherColumnsIntoStatement(PreparedStatement preparedStatement, T entity);
 
     public final List<T> findAll() {
-       QueryStatementExecution<T> a = new QueryStatementExecution<T>(prepMap.get(FIND_ALL));
+       QueryStatementExecution<T> a = new QueryStatementExecution<T>(prepMap.get(FIND_ALL), this);
        return a.execute();
        
     }
@@ -104,7 +104,7 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
     public final T findById(Long id) {
     	try{
     		Registry.getInstance().get(id, type);
-    		QueryStatementExecution<T> a = new QueryStatementExecution<T>(prepMap.get(FIND_BY_ID));
+    		QueryStatementExecution<T> a = new QueryStatementExecution<T>(prepMap.get(FIND_BY_ID), this);
        	 	return a.executeSingle(id);
     	}
     	catch(EntityNotFoundException e){
