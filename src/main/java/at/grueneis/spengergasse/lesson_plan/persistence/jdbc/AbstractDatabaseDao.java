@@ -122,7 +122,9 @@ public abstract class AbstractDatabaseDao<T extends BasePersistable> implements 
 
     public void save(T t) throws EntityAlreadyAddedException{
         if (t.getId() == null) {	
-        	//t.setId(idGen);
+        	//
+        	//Die Id-Generation hat nix
+        	//
         	Registry.getInstance().add((EFPersistable)t);
         	DMLStatementExecution<T> a = new DMLStatementExecution<T>(prepMap.get(INSERT),new Insert());
         	try {
