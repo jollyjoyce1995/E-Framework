@@ -40,7 +40,7 @@ public class QueryStatementExecution<T extends BasePersistable> extends
 		return entities;
 	}
 
-	public T executeSingle(int id) {
+	public T executeSingle(Long id) {
 		T entity = null;
 		try {
 			ResultSet resultSet = super.statement.executeQuery();
